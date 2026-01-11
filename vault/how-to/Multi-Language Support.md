@@ -2,7 +2,7 @@
 
 Balustrade works with **any programming language or tech stack**.
 
-The meta-framework (`.claude/` and `vault/`) is language-agnostic.
+The meta-framework (`.opencode/` and `vault/`) is language-agnostic.
 
 ---
 
@@ -124,7 +124,7 @@ Edit `.devcontainer/devcontainer.json`:
 
 ### 2. Add Language-Specific Hooks (Optional)
 
-Edit `.claude/hooks/pre-commit.sh`:
+Edit `.opencode/hooks/pre-commit.sh`:
 
 ```bash
 # Example: Check Python import order
@@ -150,4 +150,4 @@ It's a **meta-framework** for deterministic project management that works with a
 
 The example todo app happens to be Node. Delete it. Use your language.
 
-The `.claude/` patterns and `vault/` structure remain valuable regardless.
+The `.opencode/` patterns and `vault/` structure remain valuable regardless.

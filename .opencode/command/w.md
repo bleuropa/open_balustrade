@@ -1,5 +1,6 @@
 ---
 description: Wrap session (alias for /wrap)
+agent: build
 ---
 
 # Wrap Session

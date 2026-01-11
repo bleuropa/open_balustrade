@@ -1,5 +1,6 @@
 ---
 description: End-of-session summary and handoff
+agent: build
 ---
 
 # Wrap Session

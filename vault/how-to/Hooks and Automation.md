@@ -4,10 +4,10 @@ This document describes the automated validation and workflow hooks in your-proj
 
 ## Overview
 
-YourProject uses two types of hooks for automation:
+YourProject uses two types of automation:
 
 1. **Git Hooks** - Run during Git operations (commit, etc.)
-2. **Claude Code Hooks** - Run during Claude Code operations (compaction, etc.)
+2. **OpenCode Plugins** - Run during OpenCode operations (compaction, etc.)
 
 ## Git Hooks
 
@@ -16,10 +16,10 @@ Git hooks provide deterministic validation of code quality and commit convention
 ### Installation
 
 ```bash
-bash .claude/hooks/install-hooks.sh
+bash .opencode/hooks/install-hooks.sh
 ```
 
-This creates symlinks in `.git/hooks/` pointing to `.claude/hooks/` scripts.
+This creates symlinks in `.git/hooks/` pointing to `.opencode/hooks/` scripts.
 
 ### Available Git Hooks
 
@@ -48,7 +48,7 @@ This creates symlinks in `.git/hooks/` pointing to `.claude/hooks/` scripts.
 
 **Files checked**: `*.js`, `*.jsx`, `*.ts`, `*.tsx`, `*.md` (staged files only)
 
-**Location**: `.claude/hooks/pre-commit.sh`
+**Location**: `.opencode/hooks/pre-commit.sh`
 
 **Example output** (success):
 ```
@@ -82,7 +82,7 @@ This creates symlinks in `.git/hooks/` pointing to `.claude/hooks/` scripts.
 - Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
 - Subject max length: 50 characters
 
-**Location**: `.claude/hooks/commit-msg.sh`
+**Location**: `.opencode/hooks/commit-msg.sh`
 
 **Example output**:
 ```
@@ -115,7 +115,7 @@ See vault/how-to/Git Workflow.md for details
 - Updates "Files Recently Modified" section with recent 10 files
 - Stages PROJECT_STATUS.md (doesn't auto-commit)
 
-**Location**: `.claude/hooks/post-commit.sh`
+**Location**: `.opencode/hooks/post-commit.sh`
 
 **Example**:
 ```bash
@@ -127,67 +127,86 @@ git commit -m "feat: add user authentication"
 
 **Note**: This hook keeps PROJECT_STATUS.md timestamps current without requiring manual updates.
 
-## Claude Code Hooks
+## OpenCode Plugins
 
-Claude Code hooks provide automation during AI-assisted development.
+OpenCode plugins provide automation during AI-assisted development. They hook into OpenCode's event system to extend functionality.
 
-### Configuration
+### Plugin Location
 
-Claude Code hooks are configured in `.claude/settings.json`:
+Plugins are TypeScript or JavaScript files placed in:
 
-```json
-{
-  "hooks": {
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/pre-compaction.sh",
-            "statusMessage": "Saving context before compaction..."
-          }
-        ]
+- **Project-level**: `.opencode/plugin/` - Plugins specific to this project
+- **Global**: `~/.config/opencode/plugin/` - Plugins available to all projects
+
+Files in these directories are automatically loaded at startup.
+
+### Available Plugins
+
+#### context-preservation.ts
+
+**When it runs**: Before OpenCode compacts conversation context (memory compression)
+
+**What it does**:
+- Detects active task from git branch (T-YYYY-NNN pattern)
+- Injects task context references into the compaction summary
+- Helps resumed sessions quickly locate relevant context docs
+
+**Location**: `.opencode/plugin/context-preservation.ts`
+
+**How it works**:
+
+```typescript
+import type { Plugin } from "@opencode-ai/plugin"
+
+export const ContextPreservationPlugin: Plugin = async ({ $ }) => {
+  return {
+    "experimental.session.compacting": async (input, output) => {
+      const branch = await $`git branch --show-current 2>/dev/null`.text()
+      const taskMatch = branch.trim().match(/T-\d{4}-\d{3}/)
+
+      if (taskMatch) {
+        const taskId = taskMatch[0]
+        output.context.push(`## Active Task Context
+- **Task ID**: ${taskId}
+- **Context doc**: vault/pm/_context/${taskId}-context.md
+- **Task file**: vault/pm/tasks/${taskId}-*.md
+
+Resume work by checking the context doc for decisions and progress.`)
       }
-    ]
+    },
   }
 }
 ```
 
-### Available Claude Code Hooks
+**Result**: After compaction, the resumed session knows which task was active and where to find context.
 
-#### PreCompact
+## Plugin Events Available
 
-**When it runs**: Before Claude Code compacts conversation context (memory compression)
+OpenCode supports these plugin events:
 
-**What it does**:
-- Saves current conversation context
-- Identifies active task (if any)
-- Appends state to task context doc in `vault/pm/_context/`
-- Prevents loss of important decisions and progress
+### Session Events
+- **session.compacting** (experimental) - Before context compaction
+- **session.created** - When a new session starts
+- **session.idle** - When session becomes idle
+- **session.error** - When an error occurs
 
-**Location**: `.claude/hooks/pre-compaction.sh`
+### Tool Events
+- **tool.execute.before** - Before any tool is called
+- **tool.execute.after** - After any tool is called
 
-**Example output**:
-```
-💾 Saving context before compaction...
-📝 Active task: T-2025-003
-✅ Context saved to vault/pm/_context/T-2025-003-context.md
-```
+### File Events
+- **file.edited** - When a file is modified
+- **file.watcher.updated** - When file watcher detects changes
 
-## Hook Types Available
+### Message Events
+- **message.updated** - When a message is updated
+- **message.removed** - When a message is removed
 
-Claude Code supports these hook types (not all currently used):
-
-- **PreToolUse** - Before any tool is called
-- **PostToolUse** - After any tool is called
-- **PreCompact** - Before context compaction (currently used)
-- **PostCompact** - After context compaction
-- **PreChat** - Before chat message is processed
-- **PostChat** - After chat message is processed
+See [OpenCode Plugin Documentation](https://opencode.ai/docs/plugins/) for the complete event list.
 
 ## Deterministic Activities
 
-The hooks system ensures these activities happen automatically:
+The hooks and plugins system ensures these activities happen automatically:
 
 ### Code Quality (Git Hooks)
 - ✅ No debug statements reach production
@@ -195,10 +214,9 @@ The hooks system ensures these activities happen automatically:
 - ✅ Consistent commit message format
 - ✅ Searchable commit history
 
-### Context Preservation (Claude Code Hooks)
-- ✅ Important decisions saved before memory compression
-- ✅ Task progress preserved across sessions
-- ✅ Architectural decisions captured
+### Context Preservation (OpenCode Plugins)
+- ✅ Task context injected into compaction summaries
+- ✅ Resumed sessions know where to find context
 - ✅ Reduced token burn from re-exploration
 
 ## Bypassing Hooks
@@ -219,27 +237,46 @@ git commit --no-verify -m "feat: emergency fix"
 
 **Always clean before merging to main!**
 
-### Claude Code Hooks
+### OpenCode Plugins
 
-Claude Code hooks cannot be easily bypassed - they run automatically based on settings.json configuration.
+Plugins run automatically when their events fire. To disable a plugin:
+
+1. Remove or rename the plugin file in `.opencode/plugin/`
+2. Or comment out the export in the plugin file
 
 ## Maintenance
 
 ### Adding New Git Hooks
 
-1. Create script in `.claude/hooks/`
-2. Make executable: `chmod +x .claude/hooks/new-hook.sh`
+1. Create script in `.opencode/hooks/`
+2. Make executable: `chmod +x .opencode/hooks/new-hook.sh`
 3. Update `install-hooks.sh` to symlink it
 4. Document in this file
-5. Run `bash .claude/hooks/install-hooks.sh`
+5. Run `bash .opencode/hooks/install-hooks.sh`
 
-### Adding New Claude Code Hooks
+### Adding New OpenCode Plugins
 
-1. Create script in `.claude/hooks/`
-2. Make executable: `chmod +x .claude/hooks/new-hook.sh`
-3. Add to `.claude/settings.json` under appropriate event
-4. Document in this file
-5. Test by triggering the event
+1. Create a TypeScript file in `.opencode/plugin/`
+2. Export a Plugin function that returns event handlers
+3. Document in this file
+4. Restart OpenCode to load the plugin
+
+**Example plugin structure**:
+
+```typescript
+import type { Plugin } from "@opencode-ai/plugin"
+
+export const MyPlugin: Plugin = async ({ $, directory }) => {
+  return {
+    "session.idle": async () => {
+      // Do something when session becomes idle
+    },
+    "tool.execute.before": async (input, output) => {
+      // Modify tool behavior before execution
+    },
+  }
+}
+```
 
 ## Troubleshooting
 
@@ -251,28 +288,27 @@ ls -l .git/hooks/pre-commit
 ls -l .git/hooks/commit-msg
 ```
 
-Should show symlinks to `.claude/hooks/` scripts.
+Should show symlinks to `.opencode/hooks/` scripts.
 
 **Reinstall**:
 ```bash
-bash .claude/hooks/install-hooks.sh
+bash .opencode/hooks/install-hooks.sh
 ```
 
-### Claude Code Hooks Not Running
+### OpenCode Plugins Not Loading
 
-**Check settings.json syntax**:
+**Check plugin location**:
 ```bash
-cat .claude/settings.json | jq .
+ls -l .opencode/plugin/
 ```
 
-Should parse without errors.
+Plugin files should be `.ts` or `.js` files with exported Plugin functions.
 
-**Check hook script permissions**:
-```bash
-ls -l .claude/hooks/*.sh
-```
+**Check for syntax errors**:
+OpenCode logs plugin loading errors at startup. Check the terminal output when starting OpenCode.
 
-All should be executable (`-rwxr-xr-x` or similar).
+**Verify exports**:
+Plugins must export a function that returns an object with event handlers. The export can be named or default.
 
 ### Hooks Failing in Dev Container
 
@@ -292,11 +328,11 @@ Ensure scripts use portable paths:
 
 **Determinism**: Same validation runs every time, regardless of who (human or AI) writes the code.
 
-**Token Efficiency**: Pre-compaction hook reduces need for Claude to re-explore context after memory compression.
+**Token Efficiency**: Context preservation plugin reduces need for the agent to re-explore context after memory compression.
 
 ### What NOT to Hook
 
-**Avoid hooks that**:
+**Avoid hooks/plugins that**:
 - Take more than 2-3 seconds to run
 - Require network access (flaky, slow)
 - Make code changes automatically (surprising, hard to debug)
@@ -311,3 +347,4 @@ Ensure scripts use portable paths:
 - [[Git Workflow]] - Commit and branch conventions
 - [[Development Setup]] - Initial setup including hooks
 - [[Code Philosophy]] - Coding standards enforced by hooks
+- [OpenCode Plugins](https://opencode.ai/docs/plugins/) - Official plugin documentation

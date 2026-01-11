@@ -1,5 +1,6 @@
 ---
 description: Audit and sync project management state
+agent: plan
 ---
 
 # Groom Project State

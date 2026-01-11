@@ -1,5 +1,6 @@
 ---
 description: Run user testing with a persona
+agent: plan
 ---
 
 # User Test with Persona

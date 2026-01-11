@@ -1,5 +1,6 @@
 ---
 description: Review and address PR feedback
+agent: build
 ---
 
 # Review PR Feedback

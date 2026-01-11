@@ -25,7 +25,7 @@ open index.html
 This is **NOT** the valuable part of Balustrade.
 
 The valuable parts are:
-- `.claude/` directory (hooks, commands, agents)
+- `.opencode/` directory (hooks, commands, agents, plugins)
 - `vault/` structure (product, architecture, PM)
 - `PROJECT_STATUS.md` pattern
 
@@ -36,7 +36,7 @@ The valuable parts are:
 - React app? Delete this, add your React code
 - Mobile app? Delete this, document your iOS/Flutter/etc code
 
-The `.claude/` and `vault/` patterns work with **any** tech stack.
+The `.opencode/` and `vault/` patterns work with **any** tech stack.
 
 ## Why A Todo App?
 

@@ -1,5 +1,6 @@
 ---
 description: Plan a new work item (Epic/Story/Task/Bug)
+agent: build
 ---
 
 # Plan Work Item

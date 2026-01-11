@@ -6,15 +6,15 @@
 
 - Read `PROJECT_STATUS.md` first for current state (~500 tokens)
 - Use `/status` for quick status checks
-- Use slash commands for consistent workflows
+- Use custom commands for consistent workflows
 - Check `vault/` for documentation
 
 ## Project Structure
 
 ```
 .opencode/          # OpenCode configuration
-  command/          # Slash commands
-  agent/            # Agent definitions
+  command/          # Custom commands (/p, /s, /c, etc.)
+  agent/            # Agent definitions (subagents)
   skill/            # Reusable skills
   hooks/            # Git hooks (standard)
 vault/              # Documentation (Obsidian-style)
@@ -37,7 +37,8 @@ PROJECT_STATUS.md   # Current project state
 
 ## Agents
 
-Use `@agent-name` to invoke:
+All agents in this project are **subagents** (invoked via Task tool or @mention):
+
 - `@coordinator` - Multi-domain coordination
 - `@full-stack-dev` - Feature implementation
 - `@code-reviewer` - Code review
@@ -46,7 +47,7 @@ Use `@agent-name` to invoke:
 ## Conventions
 
 1. **Read PROJECT_STATUS.md first** - Single source of truth
-2. **Use slash commands** - Maintain consistency
+2. **Use custom commands** - Maintain consistency
 3. **Update context docs** - Track decisions
 4. **Commit incrementally** - Small, focused commits
 5. **Follow conventional commits** - type(scope): message
@@ -64,3 +65,18 @@ Use `@agent-name` to invoke:
 3. Work on implementation
 4. `/ctx` to track decisions
 5. `/c` to close and create PR
+
+## External References
+
+Load these documents on a need-to-know basis:
+
+**Documentation Standards**
+- `vault/_meta/Vault Writing Guidelines.md` - How to write vault docs
+
+**Task Context**
+- `vault/pm/_context/{TASK-ID}-context.md` - Working notes for active task
+- `vault/pm/tasks/{TASK-ID}-*.md` - Task acceptance criteria
+
+**How-To Guides**
+- `vault/how-to/Hooks and Automation.md` - Git hooks and OpenCode plugins
+- `vault/how-to/Git Workflow.md` - Branch and commit conventions

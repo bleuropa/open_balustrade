@@ -13,7 +13,7 @@ These are demonstrations, not requirements:
 
 **Why**: Keeps docs timeless and current
 
-**Where**: `.claude/hooks/pre-commit.sh` lines 59-70
+**Where**: `.opencode/hooks/pre-commit.sh` lines 59-70
 
 **Customize**: Edit word list, add exceptions, or remove entirely
 
@@ -22,7 +22,7 @@ These are demonstrations, not requirements:
 
 **Why**: Consistent task tracking
 
-**Where**: `.claude/hooks/pre-commit.sh` lines 76-106
+**Where**: `.opencode/hooks/pre-commit.sh` lines 76-106
 
 **Customize**: Add your required fields, change valid statuses
 
@@ -31,7 +31,7 @@ These are demonstrations, not requirements:
 
 **Why**: Encourages right-sized work
 
-**Where**: `.claude/hooks/pre-commit.sh` lines 112-131
+**Where**: `.opencode/hooks/pre-commit.sh` lines 112-131
 
 **Customize**: Change threshold (line 123)
 
@@ -40,7 +40,7 @@ These are demonstrations, not requirements:
 
 **Why**: Searchable history, clear changelogs
 
-**Where**: `.claude/hooks/commit-msg.sh`
+**Where**: `.opencode/hooks/commit-msg.sh`
 
 **Customize**: Add your types, change pattern
 
@@ -192,7 +192,7 @@ check_my_convention() {
 
 ### Step 4: Add To Pre-Commit Hook
 
-Edit `.claude/hooks/pre-commit.sh`:
+Edit `.opencode/hooks/pre-commit.sh`:
 
 ```bash
 # Add your function before "Run All Checks"
@@ -274,4 +274,4 @@ Start with Balustrade's examples, then:
 2. Remove what doesn't
 3. Add your own
 
-Your `.claude/hooks/` become **your team's conventions**, enforced automatically.
+Your `.opencode/hooks/` become **your team's conventions**, enforced automatically.

@@ -12,10 +12,11 @@ Step-by-step guide to replace the example with YOUR project.
 - [ ] Replace `vault/product/` docs
 - [ ] Replace `vault/architecture/` docs
 - [ ] Replace `vault/features/` docs
-- [ ] Customize `.claude/hooks/pre-commit.sh`
-- [ ] Add your agents in `.claude/agents/`
+- [ ] Customize `.opencode/hooks/pre-commit.sh`
+- [ ] Add your agents in `.opencode/agent/`
+- [ ] Customize `AGENTS.md` with project-specific rules
 - [ ] Update `.devcontainer/devcontainer.json`
-- [ ] Install hooks: `bash .claude/hooks/install-hooks.sh`
+- [ ] Install hooks: `bash .opencode/hooks/install-hooks.sh`
 
 ---
 
@@ -192,7 +193,7 @@ Each feature file:
 
 ### Remove Example Conventions You Don't Want
 
-Edit `.claude/hooks/pre-commit.sh`:
+Edit `.opencode/hooks/pre-commit.sh`:
 
 **Don't care about temporal language?** Comment out:
 ```bash
@@ -234,9 +235,21 @@ check_my_convention "$FILE"
 
 ### Example: Backend Developer Agent
 
-Create `.claude/agents/backend-dev.md`:
+Create `.opencode/agent/backend-dev.md`:
 
 ```markdown
+---
+description: Backend development specialist for APIs, databases, and server-side logic
+mode: subagent
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
+---
+
 # Backend Developer
 
 You are a backend development specialist.
@@ -265,9 +278,21 @@ You are a backend development specialist.
 
 ### Example: Frontend Developer Agent
 
-Create `.claude/agents/frontend-dev.md`:
+Create `.opencode/agent/frontend-dev.md`:
 
 ```markdown
+---
+description: Frontend development specialist for React, UI/UX, and client-side logic
+mode: subagent
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
+---
+
 # Frontend Developer
 
 You are a frontend development specialist.
@@ -392,14 +417,19 @@ Now build your app!
 
 ### Change Task ID Format
 
-Edit `.claude/commands/p.md` to change from `T-YYYY-NNN` to your format.
+Edit `.opencode/command/p.md` to change from `T-YYYY-NNN` to your format.
 
 ### Add More Slash Commands
 
-Create new `.md` files in `.claude/commands/`:
+Create new `.md` files in `.opencode/command/`:
 
-Example: `.claude/commands/deploy.md`
+Example: `.opencode/command/deploy.md`
 ```markdown
+---
+description: Deploy the application to production
+agent: build
+---
+
 # Deploy
 
 Deploy the application to production.
@@ -429,7 +459,7 @@ Warn (shows message but allows):
 
 ### Add Pre-Push Validation
 
-Create `.claude/hooks/pre-push.sh`:
+Create `.opencode/hooks/pre-push.sh`:
 ```bash
 #!/bin/bash
 # Runs before git push
@@ -440,7 +470,7 @@ npm test || exit 1
 
 Then symlink:
 ```bash
-ln -s ../../.claude/hooks/pre-push.sh .git/hooks/pre-push
+ln -s ../../.opencode/hooks/pre-push.sh .git/hooks/pre-push
 ```
 
 ---
@@ -451,10 +481,10 @@ After customization, verify:
 
 ```bash
 # 1. Hooks installed?
-ls -l .git/hooks/ | grep '.claude'
+ls -l .git/hooks/ | grep '.opencode'
 
 # 2. Hooks executable?
-ls -l .claude/hooks/*.sh
+ls -l .opencode/hooks/*.sh
 
 # 3. Test pre-commit
 git add .
@@ -462,7 +492,7 @@ git commit -m "test: verify hooks"
 # Should validate
 
 # 4. Test slash commands
-# In Claude Code:
+# In OpenCode:
 /status
 # Should read PROJECT_STATUS.md
 

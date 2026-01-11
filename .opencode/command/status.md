@@ -1,5 +1,6 @@
 ---
 description: Quick project status check (~500 tokens)
+agent: plan
 ---
 
 # Quick Status Check

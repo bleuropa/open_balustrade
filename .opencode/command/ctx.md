@@ -1,5 +1,6 @@
 ---
 description: Update context doc for current task
+agent: build
 ---
 
 # Update Context

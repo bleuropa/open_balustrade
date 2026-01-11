@@ -1,5 +1,6 @@
 ---
 description: Groom project state (alias for /groom)
+agent: plan
 ---
 
 # Groom Project State
