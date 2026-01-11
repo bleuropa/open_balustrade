@@ -449,11 +449,16 @@ MIT - Use freely, modify as needed, no attribution required.
 
 ## Credits
 
-Inspired by:
+### Forked From
+
+**[bcooke/balustrade](https://github.com/bcooke/balustrade)** - The original Balustrade meta-framework for Claude Code. This OpenCode version is a direct adaptation of that excellent work. All credit for the core concepts, architecture, and patterns goes to [@bcooke](https://github.com/bcooke).
+
+### Inspired By
+
 - Ruby on Rails (convention over configuration)
 - Git hooks (right-time enforcement)
 - Obsidian (linked knowledge)
-- OpenCode (AI-assisted development)
+- [OpenCode](https://opencode.ai) (AI-assisted development)
 
 Built to solve real problems in deterministic PM with AI.
 
