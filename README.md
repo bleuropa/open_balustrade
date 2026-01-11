@@ -1,12 +1,12 @@
 # Balustrade
 
-> **Opinionated rails for Claude Code development**
+> **Opinionated rails for OpenCode development**
 
-Balustrade is a **meta-framework** providing structured guardrails for working with Claude Code.
+Balustrade is a **meta-framework** providing structured guardrails for working with OpenCode.
 
-**Meta-framework**: Manages the "meta" of Claude Code and agentic development - how you organize work, maintain context, and enforce standards.
+**Meta-framework**: Manages the "meta" of OpenCode and agentic development - how you organize work, maintain context, and enforce standards.
 
-**Primary job**: Give people and agents "rails" for Claude Code through an opinionated template.
+**Primary job**: Give people and agents "rails" for OpenCode through an opinionated template.
 
 **Language-agnostic. Minimal dependencies. Framework-focused.**
 
@@ -14,7 +14,7 @@ Balustrade is a **meta-framework** providing structured guardrails for working w
 
 ## What Is This?
 
-A **reference implementation** showing how to use Claude Code's features together:
+A **reference implementation** showing how to use OpenCode's features together:
 - **Git hooks** enforce conventions automatically (determinism)
 - **Slash commands** guide consistent workflows (repeatability)
 - **PROJECT_STATUS.md** provides token-efficient context (~500 vs 5000+ tokens)
@@ -32,12 +32,12 @@ A **reference implementation** showing how to use Claude Code's features togethe
 
 ```
 balustrade/
-├── .claude/                    # THE FRAMEWORK (keep this)
+├── .opencode/                  # THE FRAMEWORK (keep this)
 │   ├── hooks/                  # Git hooks for enforcement
-│   ├── commands/               # Slash commands for workflows
-│   ├── agents/                 # Agent templates
-│   ├── settings.json           # Claude Code config
-│   └── aliases.sh              # Optional shell shortcuts
+│   ├── command/                # Slash commands for workflows
+│   ├── agent/                  # Agent templates
+│   ├── skill/                  # Reusable skills
+│   └── opencode.json           # Configuration (in root)
 ├── vault/                      # DOCUMENTATION PATTERNS (keep this)
 │   ├── product/                # Product vision, user journeys
 │   ├── architecture/           # System design, decisions
@@ -54,6 +54,8 @@ balustrade/
 │   ├── index.html              # Vanilla JS + Tailwind CDN
 │   └── README.md               # "This is just an example"
 ├── .devcontainer/              # Dev container config
+├── opencode.json               # OpenCode configuration
+├── OPENCODE.md                 # Project instructions for OpenCode
 ├── PROJECT_STATUS.md           # Status tracking template
 └── README.md                   # This file
 ```
@@ -92,14 +94,14 @@ python -m venv venv
 
 **Mobile? Rust? Elixir? Anything?**
 
-Balustrade is language-agnostic. The `.claude/` and `vault/` patterns work with any stack.
+Balustrade is language-agnostic. The `.opencode/` and `vault/` patterns work with any stack.
 
 See `vault/how-to/Multi-Language Support.md` for examples.
 
 ### 4. Install Hooks
 
 ```bash
-bash .claude/hooks/install-hooks.sh
+bash .opencode/hooks/install-hooks.sh
 ```
 
 This creates symlinks in `.git/hooks/`:
@@ -111,20 +113,20 @@ This creates symlinks in `.git/hooks/`:
 
 - Update `PROJECT_STATUS.md` with your project name and priorities
 - Edit `vault/product/` docs for your product vision
-- Modify `.claude/hooks/pre-commit.sh` for your conventions
-- Add your agents in `.claude/agents/`
+- Modify `.opencode/hooks/pre-commit.sh` for your conventions
+- Add your agents in `.opencode/agent/`
 
 ### 6. Use Agents and Skills (Examples Included)
 
-Balustrade includes example agents and skills to help you understand these Claude Code features:
+Balustrade includes example agents and skills to help you understand these OpenCode features:
 
-**Example Agents** (`.claude/agents/`):
+**Example Agents** (`.opencode/agent/`):
 - `coordinator` - Multi-domain task coordination
 - `full-stack-dev` - Feature implementation
 - `code-reviewer` - Code quality review
 - `bug-hunter` - Debugging specialist
 
-**Example Skills** (`.claude/skills/`):
+**Example Skills** (`.opencode/skill/`):
 - `refactor` - Code refactoring patterns
 - `test-setup` - Testing guidance
 - `api-design` - REST API best practices
@@ -132,16 +134,16 @@ Balustrade includes example agents and skills to help you understand these Claud
 
 **Use them**:
 ```
-/call full-stack-dev Implement user profile editing
-/call bug-hunter Debug login failure
-/call code-reviewer Review auth module
+@full-stack-dev Implement user profile editing
+@bug-hunter Debug login failure
+@code-reviewer Review auth module
 ```
 
 **Customize them**: Replace with YOUR project's specialists and expertise!
 
 ### 7. Start Using Slash Commands
 
-In Claude Code:
+In OpenCode:
 
 ```
 /status              # Quick status (reads PROJECT_STATUS.md only, ~500 tokens)
@@ -164,11 +166,11 @@ The example app (~100 lines) is just demonstration. Delete it.
 
 ### The Meta-Framework
 
-**`.claude/` directory** shows how to:
+**`.opencode/` directory** shows how to:
 - Enforce conventions with hooks
 - Guide workflows with commands
 - Coordinate with agents
-- Integrate with Claude Code
+- Integrate with OpenCode
 
 **`vault/` structure** shows how to:
 - Organize product documentation
@@ -198,9 +200,6 @@ The example app (~100 lines) is just demonstration. Delete it.
 
 **Post-commit** auto-updates:
 - PROJECT_STATUS.md timestamp and recent files
-
-**Pre-compaction** saves:
-- Context before Claude's memory compression
 
 ### 2. Commands Guide Workflows
 
@@ -238,23 +237,23 @@ Slash commands maintain consistency:
 
 ### What To Keep
 
-✅ `.claude/hooks/` structure (add your checks)
-✅ `.claude/commands/` patterns (modify for your workflow)
-✅ `vault/` organization (adapt for your domain)
-✅ `PROJECT_STATUS.md` concept (your project state)
+- `.opencode/hooks/` structure (add your checks)
+- `.opencode/command/` patterns (modify for your workflow)
+- `vault/` organization (adapt for your domain)
+- `PROJECT_STATUS.md` concept (your project state)
 
 ### What To Change
 
-🔧 Specific hook validations (temporal language is just an example)
-🔧 Agent definitions (add your specialists)
-🔧 Vault sections (add your domains)
-🔧 Dev container config (your stack)
+- Specific hook validations (temporal language is just an example)
+- Agent definitions (add your specialists)
+- Vault sections (add your domains)
+- Dev container config (your stack)
 
 ### What To Delete
 
-❌ `example-app/` (replace with your code)
-❌ Todo app docs in `vault/` (replace with your product)
-❌ Conventions that don't fit your project
+- `example-app/` (replace with your code)
+- Todo app docs in `vault/` (replace with your product)
+- Conventions that don't fit your project
 
 See `CUSTOMIZATION.md` for step-by-step guide.
 
@@ -299,101 +298,6 @@ See `vault/how-to/Multi-Language Support.md`.
 
 ---
 
-## Multi-Agent Workflows
-
-Dev container enables multi-agent coordination:
-- Multiple services in one environment
-- Configurable ports
-- Shared workspace
-- Coordinated development
-
-See `vault/how-to/Dev Container Setup.md`.
-
----
-
-## Flexibility: Use What Works for You
-
-Balustrade is **opinionated** about providing rails for Claude Code, but **flexible** about how you use it.
-
-### Project Management
-
-**What we provide**: Low-ceremony markdown-based PM that works great with Claude Code.
-
-**Your options**:
-1. **Use it as-is** - Markdown vault, Obsidian patterns, full workflow
-2. **Use alongside other tools** - Keep Jira/Linear/Notion for team coordination, use Balustrade for Claude Code context
-3. **Replace with your tools** - Use the hooks/commands, but connect to GitHub Issues, Linear API, etc.
-4. **Pick and choose** - Maybe just use the docs structure, not the PM system
-5. **Customize completely** - Use the patterns as inspiration, build your own
-
-### Why This Works
-
-**The core value is the meta-framework**:
-- Hooks enforce YOUR standards (whatever they are)
-- Commands guide YOUR workflows (however you define them)
-- PROJECT_STATUS.md tracks YOUR work (from wherever it comes)
-- Vault organizes YOUR knowledge (in whatever format you need)
-
-**The specific implementation** (markdown PM, Obsidian patterns) is a practical **starting point** that:
-- Works well with Claude Code out of the box
-- Requires no external services or accounts
-- Is easy to understand and modify
-- Demonstrates the patterns in action
-
-### Integration Examples
-
-**If your team uses Jira**:
-- Keep epic/story management in Jira
-- Use Balustrade's `vault/` for technical documentation
-- Create context docs that link to Jira tickets
-- Hooks can validate Jira ticket references
-
-**If your team uses Linear**:
-- Create tasks in Linear for team visibility
-- Use Balustrade for Claude Code's working context
-- Sync status between Linear and PROJECT_STATUS.md
-- Commands can create Linear issues via API
-
-**If your team uses GitHub Issues**:
-- Issues for bug tracking and feature requests
-- Balustrade tasks for implementation tracking
-- Context docs link to GitHub issues
-- Hooks validate issue references in commits
-
-**If you work solo**:
-- Use Balustrade's full markdown PM system
-- No external tools needed
-- Fast, local, private
-- Easy to customize
-
-### What's Essential vs Optional
-
-**Essential (the meta-framework)**:
-- ✅ `.claude/hooks/` - Enforcement mechanism
-- ✅ `.claude/commands/` - Workflow guidance
-- ✅ `PROJECT_STATUS.md` - Context entry point
-- ✅ Documentation structure - Human and agent readable
-
-**Optional (this implementation)**:
-- 📝 Markdown-based PM (could use APIs to other tools)
-- 📝 Obsidian patterns (could use other editors)
-- 📝 Specific vault structure (organize however you want)
-- 📝 Task ID format (use whatever convention you prefer)
-
-### The Point
-
-**Balustrade shows you a practical approach** that works well with Claude Code.
-
-**You adapt it to your needs**:
-- Work solo? Use everything as-is
-- Work on a team? Integrate with team tools
-- Have strong opinions? Customize the patterns
-- Just need docs? Use only the vault structure
-
-**The meta-framework is the valuable part** - the specific implementation is just one way to use it.
-
----
-
 ## Obsidian Integration (Optional)
 
 Balustrade works great with Obsidian for:
@@ -402,11 +306,11 @@ Balustrade works great with Obsidian for:
 - Fast full-text search
 - Wiki-style navigation
 
-**Why it works so well**: Obsidian community best practices (atomic notes, rich linking) are optimal for Claude Code's context management.
+**Why it works so well**: Obsidian community best practices (atomic notes, rich linking) are optimal for OpenCode's context management.
 
 **But it's optional.** Use VS Code, terminal, or any editor.
 
-See `vault/how-to/Obsidian Integration.md` for deep dive on why Obsidian + Claude Code work well together.
+See `vault/how-to/Obsidian Integration.md` for deep dive on why Obsidian + OpenCode work well together.
 
 ---
 
@@ -414,11 +318,11 @@ See `vault/how-to/Obsidian Integration.md` for deep dive on why Obsidian + Claud
 
 ### It's a Meta-Framework
 
-**Not a code framework** - It's a framework for working with Claude Code:
+**Not a code framework** - It's a framework for working with OpenCode:
 - Manages the "meta" of development (how you work, not what you build)
 - Provides rails for agents and humans
 - Enforces YOUR conventions (not prescriptive ones)
-- Optimizes for Claude Code's specific needs (context management, determinism)
+- Optimizes for OpenCode's specific needs (context management, determinism)
 
 **No npm install. No CLI. Just patterns.**
 
@@ -427,10 +331,10 @@ Fork the repo, customize it, make it yours.
 ### Opinionated About Process, Not Code
 
 **Strong opinions about**:
-- How to provide context to Claude Code efficiently
+- How to provide context to OpenCode efficiently
 - How to enforce standards deterministically
 - How to organize knowledge for humans and agents
-- How to track work that Claude Code manages
+- How to track work that OpenCode manages
 
 **Zero opinions about**:
 - What programming language you use
@@ -448,7 +352,7 @@ Works with **any** tech stack:
 - iOS, Android, Flutter
 - Any combination of the above
 
-The `.claude/` directory and `vault/` structure sit alongside your code, regardless of language.
+The `.opencode/` directory and `vault/` structure sit alongside your code, regardless of language.
 
 ### Teaching By Example
 
@@ -527,14 +431,6 @@ Don't copy prescriptively. Learn the patterns:
 
 ---
 
-## Future: create-balustrade CLI
-
-Eventually we may build `npx create-balustrade init` to install into existing projects.
-
-For now: **fork and modify**.
-
----
-
 ## Contributing
 
 Found a bug or want to improve the template?
@@ -557,7 +453,7 @@ Inspired by:
 - Ruby on Rails (convention over configuration)
 - Git hooks (right-time enforcement)
 - Obsidian (linked knowledge)
-- Claude Code (AI-assisted development)
+- OpenCode (AI-assisted development)
 
 Built to solve real problems in deterministic PM with AI.
 
@@ -568,7 +464,7 @@ Built to solve real problems in deterministic PM with AI.
 1. **Fork** this repo
 2. **Delete** example-app/
 3. **Add** your code
-4. **Customize** .claude/ and vault/
+4. **Customize** .opencode/ and vault/
 5. **Build** with deterministic guardrails
 
 The balustrade guides your path. Now build something great.

@@ -1,6 +1,6 @@
 # Meta-Framework: Deterministic Project Management
 
-This document describes the meta-framework for deterministic project management with Claude Code.
+This document describes the meta-framework for deterministic project management with OpenCode.
 
 ## Overview
 
@@ -27,32 +27,25 @@ The meta-framework combines strict enforcement (hooks) with token-efficient cont
 ### 2. Git Hooks (Enforcement)
 
 **pre-commit.sh** - Blocks commits that violate standards:
-- ❌ **Temporal language** in evergreen docs (vault/product, vault/architecture, vault/features)
-- ❌ **Invalid task status** (must be: backlog, in-progress, completed, blocked)
-- ❌ **Missing required task fields** (status, priority, created, updated)
-- ❌ **Debugger statements** in code
-- ❌ **Merge conflict markers**
-- ⚠️  **Console.log statements** (warns)
-- ⚠️  **Task size >7 checklist items** (warns - consider splitting)
-- ⚠️  **Branch-task misalignment** (warns)
-- ⚠️  **PROJECT_STATUS.md not updated** when task files change (warns)
+- **Temporal language** in evergreen docs (vault/product, vault/architecture, vault/features)
+- **Invalid task status** (must be: backlog, in-progress, completed, blocked)
+- **Missing required task fields** (status, priority, created, updated)
+- **Debugger statements** in code
+- **Merge conflict markers**
+- **Console.log statements** (warns)
+- **Task size >7 checklist items** (warns - consider splitting)
+- **Branch-task misalignment** (warns)
+- **PROJECT_STATUS.md not updated** when task files change (warns)
 
 **commit-msg.sh** - Validates commit message format:
-- ✅ Conventional commits: `type(scope): description`
-- ✅ Valid types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+- Conventional commits: `type(scope): description`
+- Valid types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
 
 **post-commit.sh** - Auto-updates after successful commit:
-- ✅ Updates PROJECT_STATUS.md "Last Updated" timestamp
-- ✅ Updates "Files Recently Modified" section
+- Updates PROJECT_STATUS.md "Last Updated" timestamp
+- Updates "Files Recently Modified" section
 
-### 3. Claude Code Hooks
-
-**PreCompact** - Runs before memory compaction:
-- ✅ Saves current state to task context doc
-- ✅ Appends recent commits to context
-- ✅ Prevents loss of important decisions
-
-### 4. Slash Commands (Guided Workflows)
+### 3. Slash Commands (Guided Workflows)
 
 All slash commands maintain PROJECT_STATUS.md automatically:
 
@@ -132,13 +125,13 @@ PROJECT_STATUS.md stays in sync automatically.
 **Instead of**:
 ```
 User: "What's the current status?"
-Claude: *reads 10+ vault files, scans git history* [5000+ tokens]
+Agent: *reads 10+ vault files, scans git history* [5000+ tokens]
 ```
 
 **Do this**:
 ```
 User: "/status"
-Claude: *reads PROJECT_STATUS.md only* [500 tokens]
+Agent: *reads PROJECT_STATUS.md only* [500 tokens]
 ```
 
 ## Task Size Guidelines
@@ -172,7 +165,6 @@ Claude: *reads PROJECT_STATUS.md only* [500 tokens]
 - PROJECT_STATUS.md sync
 
 **Context preservation**:
-- State saved before compaction
 - Recent files tracked
 - Timestamps maintained
 
