@@ -29,7 +29,7 @@ A visual walkthrough of how all the pieces fit together.
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Key Insight**: Balustrade sits between your code and git, managing how you work with Claude Code.
+**Key Insight**: Balustrade sits between your code and git, managing how you work with OpenCode.
 
 ---
 
@@ -128,13 +128,13 @@ $ git commit -m "add vision"
 - `pre-commit.sh` - Validates before commit
 - `commit-msg.sh` - Validates commit message format
 - `post-commit.sh` - Auto-updates PROJECT_STATUS.md
-- `pre-compaction.sh` - Saves context before Claude's memory compression
+- `pre-compaction.sh` - Saves context before memory compaction
 
 ### 2. Commands (Guided Workflows)
 
 **What**: Slash commands that guide consistent task management
 
-**When**: You invoke them in Claude Code (`/p`, `/s`, `/c`, etc.)
+**When**: You invoke them in OpenCode (`/p`, `/s`, `/c`, etc.)
 
 **Why**: Ensure every task follows same lifecycle
 
@@ -410,11 +410,13 @@ Balustrade uses a **Core + Packs** model to stay simple while supporting differe
 The core includes patterns useful for **any project**:
 
 ```
-.claude/
-├── commands/          # Task lifecycle (/p, /s, /c, /ctx, /commit)
+.opencode/
+├── command/           # Task lifecycle (/p, /s, /c, /ctx, /commit)
 ├── hooks/             # Git enforcement (pre-commit, commit-msg, etc.)
-├── agents/            # Base coordinator agent
-└── settings.json      # Hook configuration
+├── agent/             # Subagent definitions
+├── skill/             # Reusable skills
+opencode.json          # OpenCode configuration
+AGENTS.md              # Project rules for OpenCode
 
 vault/
 ├── _meta/             # Guidelines for using the vault
@@ -441,11 +443,11 @@ Packs are pre-configured agents and templates for specific project types.
 
 **How to Use Packs**:
 
-1. **Find the pack** in `.claude/agents/_packs/` or `vault/_packs/`
+1. **Find the pack** in `.opencode/agent/_packs/` or `vault/_packs/`
 2. **Copy what you need** to the main location:
    ```bash
    # Copy SaaS agents
-   cp .claude/agents/_packs/saas/*.md .claude/agents/
+   cp .opencode/agent/_packs/saas/*.md .opencode/agent/
 
    # Copy SaaS vault templates
    cp vault/_packs/saas/*.md vault/product/
@@ -457,9 +459,9 @@ Packs are pre-configured agents and templates for specific project types.
 
 ```bash
 # Copy the SaaS pack agents
-cp .claude/agents/_packs/saas/product-manager.md .claude/agents/
-cp .claude/agents/_packs/saas/ui-ux-designer.md .claude/agents/
-cp .claude/agents/_packs/saas/user-tester.md .claude/agents/
+cp .opencode/agent/_packs/saas/product-manager.md .opencode/agent/
+cp .opencode/agent/_packs/saas/ui-ux-designer.md .opencode/agent/
+cp .opencode/agent/_packs/saas/user-tester.md .opencode/agent/
 
 # Copy the SaaS vault templates
 cp vault/_packs/saas/* vault/product/
@@ -513,16 +515,16 @@ Git calls them at specific events:
 - `commit-msg` → after message is written
 - `post-commit` → after commit succeeds
 
-You install once: `bash .claude/hooks/install-hooks.sh`
+You install once: `bash .opencode/hooks/install-hooks.sh`
 
 Then they run automatically forever.
 
 ### "How does /status know what to read?"
 
-The `/status` command tells Claude:
+The `/status` command tells the agent:
 > "Read PROJECT_STATUS.md ONLY. Do not scan vault."
 
-Claude follows instructions → reads 1 file → fast response.
+The agent follows instructions → reads 1 file → fast response.
 
 ### "How does PROJECT_STATUS.md stay current?"
 
@@ -535,7 +537,7 @@ It's always in sync.
 
 ### "What if I don't want temporal language checks?"
 
-Edit `.claude/hooks/pre-commit.sh`:
+Edit `.opencode/hooks/pre-commit.sh`:
 
 ```bash
 # Comment out the check:
@@ -562,9 +564,14 @@ Obsidian adds graph view and linking, but it's optional.
 
 ### "Can I add my own slash commands?"
 
-Yes! Create `.claude/commands/your-command.md`:
+Yes! Create `.opencode/command/your-command.md`:
 
 ```markdown
+---
+description: Brief description of your command
+agent: build
+---
+
 # Your Command
 
 Steps:
@@ -573,7 +580,7 @@ Steps:
 3. Commit
 ```
 
-Then use `/your-command` in Claude Code.
+Then use `/your-command` in OpenCode.
 
 ---
 
@@ -597,7 +604,7 @@ Any language, any framework, any stack.
 
 ### 4. Customize Hooks
 
-Edit `.claude/hooks/pre-commit.sh`:
+Edit `.opencode/hooks/pre-commit.sh`:
 - Remove checks you don't want
 - Add checks for YOUR conventions
 - Make it enforce YOUR standards

@@ -1,6 +1,6 @@
 # Balustrade: Complete Summary
 
-**Ultra-minimal, language-agnostic meta-framework template for Claude Code**
+**Ultra-minimal, language-agnostic meta-framework template for OpenCode**
 
 ---
 
@@ -28,7 +28,7 @@
 
 ## File Breakdown
 
-### .claude/ (THE FRAMEWORK)
+### .opencode/ (THE FRAMEWORK)
 ```
 hooks/
   ├── pre-commit.sh         # Validates code, docs, PM discipline
@@ -61,7 +61,8 @@ skills/                     # Example skills (customize!)
   ├── api-design.md         # REST API best practices
   └── docs.md               # Documentation writing
 
-settings.json               # PreCompact hook config
+plugin/
+  └── context-preservation.ts # Saves context before compaction
 aliases.sh                  # Optional shell shortcuts
 ```
 
@@ -145,7 +146,7 @@ Example app has NO package.json, NO build step.
 Just Node built-ins + vanilla JS + CDN Tailwind.
 
 ### 3. Framework Focused
-Real value is `.claude/` and `vault/`, not the example app.
+Real value is `.opencode/` and `vault/`, not the example app.
 Delete example, keep framework.
 
 ### 4. Teaching By Example
@@ -203,10 +204,10 @@ That's it.
 - [ ] Replace vault/product/ docs
 - [ ] Replace vault/architecture/ docs
 - [ ] Replace vault/features/ docs
-- [ ] Customize .claude/hooks/
+- [ ] Customize .opencode/hooks/
 - [ ] Add your agents
 - [ ] Update dev container
-- [ ] Install hooks: `bash .claude/hooks/install-hooks.sh`
+- [ ] Install hooks: `bash .opencode/hooks/install-hooks.sh`
 
 See CUSTOMIZATION.md for details.
 
@@ -252,7 +253,7 @@ Works with any stack. Framework is about PM, not code.
 Todo app is ~100 lines. Easy to understand and delete.
 
 ### Framework First
-Real value: `.claude/` patterns and `vault/` structure.
+Real value: `.opencode/` patterns and `vault/` structure.
 
 ### Convention Over Configuration
 Standard structure, predictable workflows, automated maintenance.
@@ -339,7 +340,7 @@ rm -rf example-app/
 # (any language)
 
 # Install hooks
-bash .claude/hooks/install-hooks.sh
+bash .opencode/hooks/install-hooks.sh
 
 # Start working
 /p Your first task

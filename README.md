@@ -61,7 +61,7 @@ balustrade/
 │   └── README.md               # "This is just an example"
 ├── .devcontainer/              # Dev container config
 ├── opencode.json               # OpenCode configuration
-├── OPENCODE.md                 # Project instructions for OpenCode
+├── AGENTS.md                   # Project instructions for OpenCode
 ├── PROJECT_STATUS.md           # Status tracking template
 └── README.md                   # This file
 ```
@@ -121,6 +121,7 @@ This creates symlinks in `.git/hooks/`:
 - Edit `vault/product/` docs for your product vision
 - Modify `.opencode/hooks/pre-commit.sh` for your conventions
 - Add your agents in `.opencode/agent/`
+- Customize `AGENTS.md` with your project-specific rules
 
 ### 6. Use Agents and Skills (Examples Included)
 
@@ -456,6 +457,8 @@ MIT - Use freely, modify as needed, no attribution required.
 ## Credits
 
 Inspired by Ruby on Rails, Git hooks, Obsidian, and [OpenCode](https://opencode.ai).
+
+The `AGENTS.md` pattern follows [OpenCode's rules system](https://opencode.ai/docs/rules/).
 
 Built to solve real problems in deterministic PM with AI.
 

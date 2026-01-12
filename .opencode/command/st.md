@@ -1,5 +1,6 @@
 ---
 description: Quick status check (alias for /status)
+agent: plan
 ---
 
 # Quick Status Check

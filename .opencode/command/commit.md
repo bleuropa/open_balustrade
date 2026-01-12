@@ -1,5 +1,6 @@
 ---
 description: Create a git commit with current changes
+agent: build
 ---
 
 # Commit Changes

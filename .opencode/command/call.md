@@ -1,5 +1,6 @@
 ---
 description: Invoke a specialized agent for a task
+agent: build
 ---
 
 # Invoke Agent

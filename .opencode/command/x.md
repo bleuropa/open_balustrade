@@ -1,5 +1,6 @@
 ---
 description: Escape hatch - bypass PM hooks for this prompt
+agent: build
 ---
 
 # Escape Hatch

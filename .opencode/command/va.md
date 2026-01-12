@@ -1,5 +1,6 @@
 ---
 description: Audit vault documentation quality
+agent: plan
 ---
 
 # Vault Audit

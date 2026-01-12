@@ -1,5 +1,6 @@
 ---
 description: Close a task (updates status, merges to main)
+agent: build
 ---
 
 # Close Task

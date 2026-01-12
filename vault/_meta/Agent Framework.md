@@ -4,7 +4,7 @@ This document describes the specialized agents available in the Balustrade meta-
 
 ## Overview
 
-Agents are specialized prompts that embody specific roles, expertise, and workflows. They live in `.claude/agents/` and can be invoked for focused tasks.
+Agents are specialized prompts that embody specific roles, expertise, and workflows. They live in `.opencode/agent/` and can be invoked for focused tasks.
 
 ## Core Agents
 
@@ -84,14 +84,19 @@ The vault-writer agent creates high-quality documentation following vault guidel
 
 To add a new agent:
 
-1. Create `.claude/agents/{agent-name}.md`
+1. Create `.opencode/agent/{agent-name}.md`
 2. Include frontmatter:
    ```yaml
    ---
-   name: agent-name
    description: One-line description
-   tools: Tool1, Tool2, Tool3
-   model: sonnet
+   mode: subagent
+   tools:
+     read: true
+     write: true
+     edit: true
+     bash: true
+     glob: true
+     grep: true
    ---
    ```
 3. Document the agent's role, expertise, and workflow
@@ -115,6 +120,7 @@ To add a new agent:
 
 ## Related
 
-- `.claude/agents/` - Agent definitions
-- `.claude/commands/` - Slash commands
+- `.opencode/agent/` - Agent definitions
+- `.opencode/command/` - Slash commands
 - [[Vault Writing Guidelines]] - Documentation standards
+- [OpenCode Agents Documentation](https://opencode.ai/docs/agents/) - Official agent docs
